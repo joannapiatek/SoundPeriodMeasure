@@ -2,4 +2,16 @@
 <resources>
     <string name="Hello">Hello World, Click Me!</string>
     <string name="ApplicationName">SoundPeriodMeasure</string>
+  <color name="blueBackground">#5882FA</color>
+  <color name="blueButtons">#0B3861</color>
+  <color name="white">#FFFFFF</color>
+
+  <style name="CustomActionBarTheme"
+           parent="@android:style/Theme.Holo.Light">
+    <item name="android:actionBarStyle">@style/MainActionBar</item>
+  </style>
+  <style name="MainActionBar"
+           parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    <item name="android:background">@color/blueButtons</item>
+  </style>
 </resources>

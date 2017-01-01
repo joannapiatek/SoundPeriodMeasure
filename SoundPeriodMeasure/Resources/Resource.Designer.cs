@@ -41,11 +41,36 @@ namespace SoundPeriodMeasure
 			}
 		}
 		
+		public partial class Color
+		{
+			
+			// aapt resource value: 0x7f050000
+			public const int blueBackground = 2131034112;
+			
+			// aapt resource value: 0x7f050001
+			public const int blueButtons = 2131034113;
+			
+			// aapt resource value: 0x7f050002
+			public const int white = 2131034114;
+			
+			static Color()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Color()
+			{
+			}
+		}
+		
 		public partial class Drawable
 		{
 			
 			// aapt resource value: 0x7f020000
 			public const int Icon = 2130837504;
+			
+			// aapt resource value: 0x7f020001
+			public const int wave = 2130837505;
 			
 			static Drawable()
 			{
@@ -57,11 +82,51 @@ namespace SoundPeriodMeasure
 			}
 		}
 		
+		public partial class Id
+		{
+			
+			// aapt resource value: 0x7f070000
+			public const int imageView1 = 2131165184;
+			
+			// aapt resource value: 0x7f070001
+			public const int newMeasure = 2131165185;
+			
+			// aapt resource value: 0x7f070003
+			public const int plotView = 2131165187;
+			
+			// aapt resource value: 0x7f070004
+			public const int relativeLayout1 = 2131165188;
+			
+			// aapt resource value: 0x7f070006
+			public const int saveMeasure = 2131165190;
+			
+			// aapt resource value: 0x7f070002
+			public const int showMeasures = 2131165186;
+			
+			// aapt resource value: 0x7f070005
+			public const int startMeasure = 2131165189;
+			
+			static Id()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Id()
+			{
+			}
+		}
+		
 		public partial class Layout
 		{
 			
 			// aapt resource value: 0x7f030000
 			public const int Main = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int Recorder = 2130903041;
+			
+			// aapt resource value: 0x7f030002
+			public const int SavedResults = 2130903042;
 			
 			static Layout()
 			{
@@ -88,6 +153,25 @@ namespace SoundPeriodMeasure
 			}
 			
 			private String()
+			{
+			}
+		}
+		
+		public partial class Style
+		{
+			
+			// aapt resource value: 0x7f060000
+			public const int CustomActionBarTheme = 2131099648;
+			
+			// aapt resource value: 0x7f060001
+			public const int MainActionBar = 2131099649;
+			
+			static Style()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Style()
 			{
 			}
 		}
