@@ -10,6 +10,7 @@ using Android.Media;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
+using Android.Views.TextService;
 using Android.Widget;
 
 namespace SoundPeriodMeasure.Helpers
@@ -18,12 +19,14 @@ namespace SoundPeriodMeasure.Helpers
     {
         private MediaRecorder _recorder;
         private MediaPlayer mPlayer;
-        private string _filePath = "/dev/null";
+        private const string DefaultPath = "/dev/null";
+        private string _filePath;
         // This file is used to record voice
         private const double EmaFilter = 0.6;
 
-        public void Start()
-        {           
+        public void Start(string filePath = DefaultPath)
+        {
+            _filePath = filePath;
             try
             {
                 _recorder = new MediaRecorder();
@@ -51,22 +54,22 @@ namespace SoundPeriodMeasure.Helpers
             _recorder = null;
         }
 
-        public void StartPlaying()
-        {
-            mPlayer = new MediaPlayer();
+        //public void StartPlaying()
+        //{
+        //    mPlayer = new MediaPlayer();
 
-            mPlayer.SetDataSource(_filePath);
-            mPlayer.Prepare();
-            mPlayer.Start();
-        }
+        //    mPlayer.SetDataSource(_filePath);
+        //    mPlayer.Prepare();
+        //    mPlayer.Start();
+        //}
 
-        public void StopPlaying()
-        {
-            if (mPlayer == null) return;
+        //public void StopPlaying()
+        //{
+        //    if (mPlayer == null) return;
             
-            mPlayer.Release();
-            mPlayer = null;
-        }
+        //    mPlayer.Release();
+        //    mPlayer = null;
+        //}
 
         public double GetAmplitude()
         {

@@ -30,6 +30,7 @@ namespace SoundPeriodMeasure.Activities
 
         private const int DataPointsSize = 90000;
         private double[] _dataPoints;
+        private byte[] _dataPointsByte;
 
         private PlotView _plotView;
         private Recorder _recorder;
@@ -80,11 +81,14 @@ namespace SoundPeriodMeasure.Activities
         {
             _recordButton.Text = Stop;
             
-            _dataPoints = new double[DataPointsSize];
+            //_dataPoints = new double[DataPointsSize];
             _isRecording = true;
-            _recorder.Start();
 
-            ThreadPool.QueueUserWorkItem(o => SaveRecordAmplitude());
+            var dir = this.GetExternalFilesDir(null).Path;
+            string path = dir + FileName;
+            _recorder.Start(path);
+
+            //ThreadPool.QueueUserWorkItem(o => SaveRecordAmplitude());
         }
 
         private void StopMeasure()
@@ -92,38 +96,48 @@ namespace SoundPeriodMeasure.Activities
             _isRecording = false;           
             _recorder.Stop();
             _recordButton.Text = Start;
+
+
+            var dir = this.GetExternalFilesDir(null).Path;
+            string path = dir + FileName;
+
+            _dataPointsByte = File.ReadAllBytes(path);
+             SetPlotData();
         }
 
-        private void SetPlotData()
+        private void SetPlotData()//int lastFilledIndex)
         {
             _plotView.Model.Series.Clear();
-            var series = PlotHelper.CreateLineSeries(_dataPoints);
+            //var series = PlotHelper.CreateLineSeries(_dataPoints, lastFilledIndex);
+            var series = PlotHelper.CreateLineSeriesFromByte(_dataPointsByte);
             _plotView.Model.Series.Add(series);
             _plotView.InvalidatePlot();
         }
 
-        private void SaveRecordAmplitude()
-        {
-            for (int i = 0; i < DataPointsSize; i++)
-            {
-                SaveCurrentAmplitude(i);
-                if (!_isRecording)
-                {
-                    break;
-                }
-            }
+        //private void SaveRecordAmplitude()
+        //{
+        //    int lastIndex = -1;
+        //    for (int i = 0; i < DataPointsSize; i++)
+        //    {
+        //        SaveCurrentAmplitude(i);
+        //        if (!_isRecording)
+        //        {
+        //            lastIndex = i;
+        //            break;
+        //        }
+        //    }
 
-            RunOnUiThread(() =>
-            {
-                StopMeasure();
-                SetPlotData();
-            });
-        }
+        //    RunOnUiThread(() =>
+        //    {
+        //        StopMeasure();
+        //        SetPlotData(lastIndex);
+        //    });
+        //}
 
-        private void SaveCurrentAmplitude(int index)
-        {
-            var amp = _recorder.GetAmplitude();
-            _dataPoints[index] = amp;
-        }
+        //private void SaveCurrentAmplitude(int index)
+        //{
+        //    var amp = _recorder.GetAmplitude();
+        //    _dataPoints[index] = amp;
+        //}
     }
 }

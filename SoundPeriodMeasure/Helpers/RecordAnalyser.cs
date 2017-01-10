@@ -13,10 +13,8 @@ using Android.Media;
 
 namespace SoundPeriodMeasure.Helpers
 {
-    public class AudioAnalyser
+    public class RecordAnalyser
     {
-        private MediaCodec _codec;
-
         public void ProcessToChartData(string path)
         {
             //// Instantiate MediaCodec

@@ -15,10 +15,10 @@ namespace SoundPeriodMeasure.Helpers
     {
         public static PlotModel CreatePlotModel()
         {
-            var plotModel = new PlotModel { Title = "Wyniki pomiarów" };
+            var plotModel = new PlotModel {Title = "Wyniki pomiarów"};
 
-            plotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom });
-            plotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Maximum = 10, Minimum = 0 });
+            plotModel.Axes.Add(new LinearAxis {Position = AxisPosition.Bottom});
+            plotModel.Axes.Add(new LinearAxis {Position = AxisPosition.Left, Maximum = 10, Minimum = 0});
             plotModel.Background = OxyColors.White;
             plotModel.PlotAreaBorderThickness = new OxyThickness(2, 2, 2, 2);
             plotModel.PlotAreaBorderColor = OxyColors.Black;
@@ -26,8 +26,10 @@ namespace SoundPeriodMeasure.Helpers
             return plotModel;
         }
 
-        public static LineSeries CreateLineSeries(double[] values)
+        public static LineSeries CreateLineSeries(double[] values, int lastFilledIndex)
         {
+            if (values.Length - 1 < lastFilledIndex) return null;
+
             var series = new LineSeries
             {
                 MarkerType = MarkerType.Circle,
@@ -40,7 +42,7 @@ namespace SoundPeriodMeasure.Helpers
             double[] valuesToPlot = new double[0];
             bool valuesIncreasing = false;
 
-            for (int j = 0; j < values.Length; j++)
+            for (int j = 0; j < lastFilledIndex; j++)
             {
                 if (valuesIncreasing)
                 {
@@ -50,7 +52,7 @@ namespace SoundPeriodMeasure.Helpers
                 if (Math.Abs(values[j]) > 0.1)
                 {
                     startOfPlot = j;
-                    valuesToPlot = new double[values.Length - j];
+                    valuesToPlot = new double[lastFilledIndex - j];
                     valuesToPlot[0] = values[j];
                     valuesIncreasing = true;
                 }
@@ -64,7 +66,10 @@ namespace SoundPeriodMeasure.Helpers
             foreach (var value in valuesToPlot)
             {
                 series.Points.Add(new DataPoint(i, value));
-                i++;
+                if (i++ > 9000)
+                {
+                    break;
+                }
             }
 
             //series.Points.Add(new DataPoint(0.0, 6.0));
@@ -85,6 +90,51 @@ namespace SoundPeriodMeasure.Helpers
             return series;
         }
 
-        
+        public static LineSeries CreateLineSeriesFromByte(byte[] values)
+        {
+            var series = new LineSeries
+            {
+                MarkerType = MarkerType.Circle,
+                MarkerSize = 2,
+                MarkerStroke = OxyColors.Black
+            };
+
+
+            int startOfPlot = -1;
+            byte[] valuesToPlot = new byte[0];
+            bool valuesIncreasing = false;
+
+            for (int j = 0; j < values.Length; j++)
+            {
+                if (valuesIncreasing)
+                {
+                    valuesToPlot[j - startOfPlot] = values[j];
+                    continue;
+                }
+                if (Math.Abs(values[j]) > 0.1)
+                {
+                    startOfPlot = j;
+                    valuesToPlot = new byte[values.Length - j];
+                    valuesToPlot[0] = values[j];
+                    valuesIncreasing = true;
+                }
+            }
+            if (startOfPlot == -1)
+            {
+                return series;
+            }
+
+            int i = 0;
+            foreach (var value in valuesToPlot)
+            {
+                series.Points.Add(new DataPoint(i, value));
+                if (i++ > 9000)
+                {
+                    break;
+                }
+            }
+
+            return series;
+        }
     }
 }
