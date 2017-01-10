@@ -1,18 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
 using Android.Media;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Views.TextService;
-using Android.Widget;
+using SoundPeriodMeasure.SmallClasses;
 
 namespace SoundPeriodMeasure.Helpers
 {
@@ -36,8 +25,7 @@ namespace SoundPeriodMeasure.Helpers
                 _recorder.SetOutputFormat(OutputFormat.ThreeGpp);
                 _recorder.SetOutputFile(_filePath);
                 _recorder.SetAudioEncoder(AudioEncoder.AmrNb);
-                //_recorder.SetAudioEncodingBitRate(8);
-                
+               
                 _recorder.Prepare();
                 _recorder.Start();
                 _watch = Stopwatch.StartNew();

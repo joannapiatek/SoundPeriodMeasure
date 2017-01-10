@@ -1,14 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
-using Android.Content;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using SoundPeriodMeasure.Helpers;
 
 namespace SoundPeriodMeasure.Activities
 {
@@ -23,14 +18,26 @@ namespace SoundPeriodMeasure.Activities
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.SavedResults);
 
-            items = new string[] { "Vegetables", "Fruits", "Flower Buds", "Legumes", "Bulbs", "Tubers" };
-            ListAdapter = new ArrayAdapter<String>(this, Android.Resource.Layout.SimpleListItem1, items);
+            items = FilesHelper.GetFilesNames();
+            ListAdapter = new ArrayAdapter<String>(this, Android.Resource.Layout.SimpleListItem1, items);           
         }
 
         protected override void OnListItemClick(ListView l, View v, int position, long id)
         {
-            var t = items[position];
-            Android.Widget.Toast.MakeText(this, t, Android.Widget.ToastLength.Short).Show();
+            var fileName = items[position];
+            var fileContent = FilesHelper.ReadTextFromFile(fileName);
+            ShowAlert(fileContent);
+        }
+
+        private void ShowAlert(string content)
+        {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.SetTitle("File content:");
+            alert.SetMessage(content);
+            alert.SetPositiveButton("OK", (senderAlert, args) => {});
+
+            Dialog dialog = alert.Create();
+            dialog.Show();
         }
     }
 }

@@ -1,15 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using Android.Media;
+using SoundPeriodMeasure.SmallClasses;
 
 namespace SoundPeriodMeasure.Helpers
 {
@@ -17,7 +9,7 @@ namespace SoundPeriodMeasure.Helpers
     {
         public static List<AmplitudeInTime> FindMaximas(AmplitudeInTime[] values)
         {
-            int monotonicLength = 5;
+            int monotonicLength = 4;
             double [] monotonic = new double[monotonicLength];
             var maximas = new List<AmplitudeInTime>();
 
@@ -35,8 +27,7 @@ namespace SoundPeriodMeasure.Helpers
 
                 if (monotonic[0] < monotonic[1]
                     && monotonic[1] > monotonic[2]
-                    && monotonic[2] > monotonic[3]
-                    && monotonic[3] > monotonic[4])
+                    && monotonic[2] > monotonic[3])
                 {
                     maximas.Add(values[i+1]);
                 }
@@ -50,6 +41,22 @@ namespace SoundPeriodMeasure.Helpers
             }
 
             return maximas;
+        }
+
+        public static List<SoundPeriod> CreatePeriods(IList<AmplitudeInTime> amplitudes)
+        {
+            var periods = new List<SoundPeriod>();
+
+            for (int i = 0; i < amplitudes.Count-1; i++)
+            {
+                var meas = Math.Abs(amplitudes[i].ElapsedMiliseconds - amplitudes[i + 1].ElapsedMiliseconds);
+                var descr = (i+1) + " and " + (i + 2) + ": " ;
+
+                var period = new SoundPeriod(meas, descr);
+                periods.Add(period);
+            }
+
+            return periods;
         }
     }
 }

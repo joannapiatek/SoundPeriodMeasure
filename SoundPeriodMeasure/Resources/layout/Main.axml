@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/blueButtons"
+        android:textColor="@color/white"
         android:id="@+id/newMeasure"
         android:layout_marginRight="0.0dp"
         android:layout_margin="10dp" />
@@ -25,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/blueButtons"
+        android:textColor="@color/white"
         android:id="@+id/showMeasures"
         android:layout_marginRight="0.0dp"
         android:layout_margin="10dp" />

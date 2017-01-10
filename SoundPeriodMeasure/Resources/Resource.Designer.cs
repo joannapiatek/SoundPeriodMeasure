@@ -97,6 +97,9 @@ namespace SoundPeriodMeasure
 			// aapt resource value: 0x7f070004
 			public const int relativeLayout1 = 2131165188;
 			
+			// aapt resource value: 0x7f070007
+			public const int resultsView = 2131165191;
+			
 			// aapt resource value: 0x7f070006
 			public const int saveMeasure = 2131165190;
 			

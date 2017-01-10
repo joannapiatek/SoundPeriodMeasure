@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using SoundPeriodMeasure.SmallClasses;
 
 namespace SoundPeriodMeasure.Helpers
 {
@@ -39,31 +33,7 @@ namespace SoundPeriodMeasure.Helpers
                 MarkerSize = 2,
                 MarkerStroke = OxyColors.Black
             };
-
-            //AmplitudeInTime[] valuesToPlot = values.Where(v => v != null && v.Amplitude > 0).ToArray();
-            //int startOfPlot = -1;
-            //bool valuesIncreasing = false;
-
-            //for (int j = 0; j < lastFilledIndex; j++)
-            //{
-            //    if (valuesIncreasing)
-            //    {
-            //        valuesToPlot[j - startOfPlot] = values[j];
-            //        continue;
-            //    }
-            //    if (Math.Abs(values[j].Amplitude) > 0.1)
-            //    {
-            //        startOfPlot = j;
-            //        valuesToPlot = new AmplitudeInTime[lastFilledIndex - j];
-            //        valuesToPlot[0] = values[j];
-            //        valuesIncreasing = true;
-            //    }
-            //}
-            //if (startOfPlot == -1)
-            //{
-            //    return series;
-            //}
-
+          
             int i = 0;
             foreach (var value in values)
             {
