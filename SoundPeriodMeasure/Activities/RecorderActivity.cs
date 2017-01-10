@@ -29,7 +29,7 @@ namespace SoundPeriodMeasure.Activities
         private const string FileName = "/record.aac";
 
         private const int DataPointsSize = 90000;
-        private double[] _dataPoints;
+        private AmplitudeInTime [] _dataPoints;
         private byte[] _dataPointsByte;
 
         private PlotView _plotView;
@@ -81,14 +81,14 @@ namespace SoundPeriodMeasure.Activities
         {
             _recordButton.Text = Stop;
             
-            //_dataPoints = new double[DataPointsSize];
+            _dataPoints = new AmplitudeInTime[DataPointsSize];
             _isRecording = true;
 
-            var dir = this.GetExternalFilesDir(null).Path;
-            string path = dir + FileName;
-            _recorder.Start(path);
+            //var dir = this.GetExternalFilesDir(null).Path;
+            //string path = dir + FileName;
+            _recorder.Start();
 
-            //ThreadPool.QueueUserWorkItem(o => SaveRecordAmplitude());
+            ThreadPool.QueueUserWorkItem(o => SaveRecordAmplitude());
         }
 
         private void StopMeasure()
@@ -98,46 +98,53 @@ namespace SoundPeriodMeasure.Activities
             _recordButton.Text = Start;
 
 
-            var dir = this.GetExternalFilesDir(null).Path;
-            string path = dir + FileName;
+            //var dir = this.GetExternalFilesDir(null).Path;
+            //string path = dir + FileName;
 
-            _dataPointsByte = File.ReadAllBytes(path);
-             SetPlotData();
+            //_dataPointsByte = File.ReadAllBytes(path);
+            //SetPlotData();
         }
 
-        private void SetPlotData()//int lastFilledIndex)
+        private void SetPlotData(int lastFilledIndex)
         {
             _plotView.Model.Series.Clear();
-            //var series = PlotHelper.CreateLineSeries(_dataPoints, lastFilledIndex);
-            var series = PlotHelper.CreateLineSeriesFromByte(_dataPointsByte);
-            _plotView.Model.Series.Add(series);
+            //var series = PlotHelper.CreateLineSeriesFromByte(_dataPointsByte);
+            var mainSeries = PlotHelper.CreateLineSeries(_dataPoints, lastFilledIndex);          
+            _plotView.Model.Series.Add(mainSeries);
+
+            var maximas = DataAnalyser.FindMaximas(_dataPoints);
+            var maximasSeries = PlotHelper.CreateLineSeries(maximas.ToArray());
+            maximasSeries.MarkerStroke = OxyColors.Red;
+            _plotView.Model.Series.Add(maximasSeries);
+
             _plotView.InvalidatePlot();
         }
 
-        //private void SaveRecordAmplitude()
-        //{
-        //    int lastIndex = -1;
-        //    for (int i = 0; i < DataPointsSize; i++)
-        //    {
-        //        SaveCurrentAmplitude(i);
-        //        if (!_isRecording)
-        //        {
-        //            lastIndex = i;
-        //            break;
-        //        }
-        //    }
+        private void SaveRecordAmplitude()
+        {
+            int lastIndex = -1;
+            for (int i = 0; i < DataPointsSize; i++)
+            {
+                SaveCurrentAmplitude(i);
+                if (!_isRecording)
+                {
+                    lastIndex = i;
+                    break;
+                }
+            }
 
-        //    RunOnUiThread(() =>
-        //    {
-        //        StopMeasure();
-        //        SetPlotData(lastIndex);
-        //    });
-        //}
+            RunOnUiThread(() =>
+            {
+                StopMeasure();
+                _dataPoints = _dataPoints.Where(v => v != null && v.Amplitude > 0).ToArray();
+                SetPlotData(lastIndex);
+            });
+        }
 
-        //private void SaveCurrentAmplitude(int index)
-        //{
-        //    var amp = _recorder.GetAmplitude();
-        //    _dataPoints[index] = amp;
-        //}
+        private void SaveCurrentAmplitude(int index)
+        {
+            var ampInTime = _recorder.GetAmplitudeInTime();
+            _dataPoints[index] = ampInTime;
+        }
     }
 }

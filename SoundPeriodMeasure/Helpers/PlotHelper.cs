@@ -18,7 +18,7 @@ namespace SoundPeriodMeasure.Helpers
             var plotModel = new PlotModel {Title = "Wyniki pomiarów"};
 
             plotModel.Axes.Add(new LinearAxis {Position = AxisPosition.Bottom});
-            plotModel.Axes.Add(new LinearAxis {Position = AxisPosition.Left, Maximum = 10, Minimum = 0});
+            plotModel.Axes.Add(new LinearAxis {Position = AxisPosition.Left});
             plotModel.Background = OxyColors.White;
             plotModel.PlotAreaBorderThickness = new OxyThickness(2, 2, 2, 2);
             plotModel.PlotAreaBorderColor = OxyColors.Black;
@@ -26,9 +26,12 @@ namespace SoundPeriodMeasure.Helpers
             return plotModel;
         }
 
-        public static LineSeries CreateLineSeries(double[] values, int lastFilledIndex)
+        public static LineSeries CreateLineSeries(AmplitudeInTime[] values, int lastFilledIndex = -1)
         {
-            if (values.Length - 1 < lastFilledIndex) return null;
+            if (lastFilledIndex == -1 || values.Length - 1 < lastFilledIndex)
+            {
+                lastFilledIndex = values.Length;
+            }
 
             var series = new LineSeries
             {
@@ -37,104 +40,89 @@ namespace SoundPeriodMeasure.Helpers
                 MarkerStroke = OxyColors.Black
             };
 
+            //AmplitudeInTime[] valuesToPlot = values.Where(v => v != null && v.Amplitude > 0).ToArray();
+            //int startOfPlot = -1;
+            //bool valuesIncreasing = false;
 
-            int startOfPlot = -1;
-            double[] valuesToPlot = new double[0];
-            bool valuesIncreasing = false;
-
-            for (int j = 0; j < lastFilledIndex; j++)
-            {
-                if (valuesIncreasing)
-                {
-                    valuesToPlot[j - startOfPlot] = values[j];
-                    continue;
-                }
-                if (Math.Abs(values[j]) > 0.1)
-                {
-                    startOfPlot = j;
-                    valuesToPlot = new double[lastFilledIndex - j];
-                    valuesToPlot[0] = values[j];
-                    valuesIncreasing = true;
-                }
-            }
-            if (startOfPlot == -1)
-            {
-                return series;
-            }
+            //for (int j = 0; j < lastFilledIndex; j++)
+            //{
+            //    if (valuesIncreasing)
+            //    {
+            //        valuesToPlot[j - startOfPlot] = values[j];
+            //        continue;
+            //    }
+            //    if (Math.Abs(values[j].Amplitude) > 0.1)
+            //    {
+            //        startOfPlot = j;
+            //        valuesToPlot = new AmplitudeInTime[lastFilledIndex - j];
+            //        valuesToPlot[0] = values[j];
+            //        valuesIncreasing = true;
+            //    }
+            //}
+            //if (startOfPlot == -1)
+            //{
+            //    return series;
+            //}
 
             int i = 0;
-            foreach (var value in valuesToPlot)
+            foreach (var value in values)
             {
-                series.Points.Add(new DataPoint(i, value));
+                series.Points.Add(new DataPoint(value.ElapsedMiliseconds, value.Amplitude));
                 if (i++ > 9000)
                 {
                     break;
                 }
-            }
-
-            //series.Points.Add(new DataPoint(0.0, 6.0));
-            //series.Points.Add(new DataPoint(1.4, 2.1));
-            //series.Points.Add(new DataPoint(2.0, 4.2));
-            //series.Points.Add(new DataPoint(3.3, 2.3));
-            //series.Points.Add(new DataPoint(4.7, 7.4));
-            //series.Points.Add(new DataPoint(6.0, 6.2));
-            //series.Points.Add(new DataPoint(8.9, 8.9));
-            //series.Points.Add(new DataPoint(0.0, 6.0));
-            //series.Points.Add(new DataPoint(1.4, 2.1));
-            //series.Points.Add(new DataPoint(2.0, 4.2));
-            //series.Points.Add(new DataPoint(3.3, 2.3));
-            //series.Points.Add(new DataPoint(4.7, 7.4));
-            //series.Points.Add(new DataPoint(6.0, 6.2));
-            //series.Points.Add(new DataPoint(8.9, 8.9));
+            }          
 
             return series;
         }
 
-        public static LineSeries CreateLineSeriesFromByte(byte[] values)
-        {
-            var series = new LineSeries
-            {
-                MarkerType = MarkerType.Circle,
-                MarkerSize = 2,
-                MarkerStroke = OxyColors.Black
-            };
+        //public static LineSeries CreateLineSeriesFromByte(byte[] values)
+        //{
+        //    var series = new LineSeries
+        //    {
+        //        MarkerType = MarkerType.Circle,
+        //        MarkerSize = 2,
+        //        MarkerStroke = OxyColors.Black
+        //    };
 
 
-            int startOfPlot = -1;
-            byte[] valuesToPlot = new byte[0];
-            bool valuesIncreasing = false;
+        //    int startOfPlot = -1;
+        //    byte[] valuesToPlot = new byte[0];
+        //    bool valuesIncreasing = false;
 
-            for (int j = 0; j < values.Length; j++)
-            {
-                if (valuesIncreasing)
-                {
-                    valuesToPlot[j - startOfPlot] = values[j];
-                    continue;
-                }
-                if (Math.Abs(values[j]) > 0.1)
-                {
-                    startOfPlot = j;
-                    valuesToPlot = new byte[values.Length - j];
-                    valuesToPlot[0] = values[j];
-                    valuesIncreasing = true;
-                }
-            }
-            if (startOfPlot == -1)
-            {
-                return series;
-            }
+        //    for (int j = 0; j < values.Length; j++)
+        //    {
+        //        if (valuesIncreasing)
+        //        {
+        //            valuesToPlot[j - startOfPlot] = values[j];
+        //            continue;
+        //        }
+        //        if (Math.Abs(values[j]) > 0.1)
+        //        {
+        //            startOfPlot = j;
+        //            valuesToPlot = new byte[values.Length - j];
+        //            valuesToPlot[0] = values[j];
+        //            valuesIncreasing = true;
+        //        }
+        //    }
+        //    if (startOfPlot == -1)
+        //    {
+        //        return series;
+        //    }
 
-            int i = 0;
-            foreach (var value in valuesToPlot)
-            {
-                series.Points.Add(new DataPoint(i, value));
-                if (i++ > 9000)
-                {
-                    break;
-                }
-            }
+        //    int i = 0;
+        //    foreach (var value in valuesToPlot)
+        //    {
+        //        series.Points.Add(new DataPoint(i, value));
+        //        if (i++ > 90000)
+        //        {
+        //            break;
+        //        }
+        //    }
 
-            return series;
-        }
+        //    return series;
+        //}
+
     }
 }

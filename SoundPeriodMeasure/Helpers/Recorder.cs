@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,8 +22,9 @@ namespace SoundPeriodMeasure.Helpers
         private MediaPlayer mPlayer;
         private const string DefaultPath = "/dev/null";
         private string _filePath;
-        // This file is used to record voice
-        private const double EmaFilter = 0.6;
+
+        private Stopwatch _watch;
+        private long _startTime;
 
         public void Start(string filePath = DefaultPath)
         {
@@ -34,10 +36,12 @@ namespace SoundPeriodMeasure.Helpers
                 _recorder.SetOutputFormat(OutputFormat.ThreeGpp);
                 _recorder.SetOutputFile(_filePath);
                 _recorder.SetAudioEncoder(AudioEncoder.AmrNb);
-
-
+                //_recorder.SetAudioEncodingBitRate(8);
+                
                 _recorder.Prepare();
                 _recorder.Start();
+                _watch = Stopwatch.StartNew();
+                _startTime = _watch.ElapsedMilliseconds;
             }
             catch (Exception ex)
             {
@@ -50,6 +54,7 @@ namespace SoundPeriodMeasure.Helpers
             if (_recorder == null) return;
 
             _recorder.Stop();
+            _watch.Stop();
             _recorder.Release();
             _recorder = null;
         }
@@ -71,14 +76,14 @@ namespace SoundPeriodMeasure.Helpers
         //    mPlayer = null;
         //}
 
-        public double GetAmplitude()
+        public AmplitudeInTime GetAmplitudeInTime()
         {
             if (_recorder != null)
             {
-                return (_recorder.MaxAmplitude);
+                return new AmplitudeInTime(_recorder.MaxAmplitude, _watch.ElapsedMilliseconds - _startTime);
             }
 
-            return 0;
+            return new AmplitudeInTime();
         }
     }
 }

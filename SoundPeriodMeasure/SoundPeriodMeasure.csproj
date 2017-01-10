@@ -18,6 +18,8 @@
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,10 +61,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\AmplitudeInTime.cs" />
     <Compile Include="Helpers\PlotHelper.cs" />
     <Compile Include="Activities\RecorderActivity.cs" />
     <Compile Include="Activities\SavedResultsActivity.cs" />
-    <Compile Include="Helpers\RecordAnalyser.cs" />
+    <Compile Include="Helpers\DataAnalyser.cs" />
     <Compile Include="Helpers\Recorder.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
