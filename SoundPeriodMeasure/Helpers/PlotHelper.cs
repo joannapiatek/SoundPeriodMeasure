@@ -9,7 +9,7 @@ namespace SoundPeriodMeasure.Helpers
     {
         public static PlotModel CreatePlotModel()
         {
-            var plotModel = new PlotModel {Title = "Wyniki pomiarów"};
+            var plotModel = new PlotModel {Title = "Measure results"};
 
             plotModel.Axes.Add(new LinearAxis {Position = AxisPosition.Bottom});
             plotModel.Axes.Add(new LinearAxis {Position = AxisPosition.Left});

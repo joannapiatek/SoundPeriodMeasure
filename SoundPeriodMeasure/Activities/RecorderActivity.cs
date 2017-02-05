@@ -13,7 +13,7 @@ using SoundPeriodMeasure.SmallClasses;
 
 namespace SoundPeriodMeasure.Activities
 {
-    [Activity(Label = "Nowe nagranie")]
+    [Activity(Label = "New measure")]
     public class RecorderActivity : Activity
     {
         private const string Stop = "STOP";

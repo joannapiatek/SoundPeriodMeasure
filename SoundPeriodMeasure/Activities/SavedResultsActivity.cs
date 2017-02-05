@@ -1,5 +1,6 @@
 using System;
 using Android.App;
+using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
@@ -7,10 +8,10 @@ using SoundPeriodMeasure.Helpers;
 
 namespace SoundPeriodMeasure.Activities
 {
-    [Activity(Label = "Zapisane pomiary")]
+    [Activity(Label = "Saved measures")]
     public class SavedResultsActivity : ListActivity
     {
-        private string[] items;
+        private string[] _items;
 
 
         protected override void OnCreate(Bundle bundle)
@@ -18,13 +19,13 @@ namespace SoundPeriodMeasure.Activities
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.SavedResults);
 
-            items = FilesHelper.GetFilesNames();
-            ListAdapter = new ArrayAdapter<String>(this, Android.Resource.Layout.SimpleListItem1, items);           
+            _items = FilesHelper.GetFilesNames();
+            ListAdapter = new ArrayAdapter<String>(this, Android.Resource.Layout.SimpleListItem1, _items);
         }
 
         protected override void OnListItemClick(ListView l, View v, int position, long id)
         {
-            var fileName = items[position];
+            var fileName = _items[position];
             var fileContent = FilesHelper.ReadTextFromFile(fileName);
             ShowAlert(fileContent);
         }
